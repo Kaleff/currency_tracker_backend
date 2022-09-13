@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class RateController extends Controller
 {
+    private $ratesArray = [];
     // Store the rates data in database
     public function store()
     {
@@ -23,6 +24,9 @@ class RateController extends Controller
         // Return the information about all the currencies
         $rates = Rate::all()
                     ->pluck('rate', 'ID');
-        return response()->json($rates);
+        foreach($rates as $name=>$rate) {
+            $this->ratesArray[] = ['name' => $name, 'rate' => (float) $rate];
+        }
+        return response()->json($this->ratesArray);
     }
 }
